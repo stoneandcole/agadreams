@@ -2,6 +2,7 @@
 
 @theme inline {
   --font-sans: var(--font-jakarta);
+  --font-display: var(--font-fraunces);
 
   /* AgaDream palette */
   --color-terracotta-50:  #fdf4f0;
@@ -36,8 +37,37 @@
   --color-ocean-700: #0060a0;
   --color-ocean-800: #045284;
   --color-ocean-900: #09446d;
+
+  /* Warm card shadow */
+  --shadow-card: 0 2px 8px 0 rgb(217 92 46 / 0.07), 0 1px 3px 0 rgb(0 0 0 / 0.06);
+  --shadow-card-hover: 0 12px 32px 0 rgb(217 92 46 / 0.13), 0 4px 12px 0 rgb(0 0 0 / 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background-color: var(--color-terracotta-200);
+  color: var(--color-terracotta-900);
+}
+
+/* Reusable eyebrow label — replaces 7 identical inline patterns */
+@layer utilities {
+  .eyebrow {
+    @apply text-terracotta-500 text-sm font-semibold uppercase tracking-wider;
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  .font-display {
+    font-family: var(--font-fraunces), Georgia, serif;
+  }
 }

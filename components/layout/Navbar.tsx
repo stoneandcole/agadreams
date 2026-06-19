@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import MobileMenu from "./MobileMenu";
+import WhatsAppIcon from "@/components/ui/WhatsAppIcon";
+import { buildWhatsAppGenericUrl } from "@/lib/whatsapp";
 
 const links = [
   { href: "/appartements", label: "Appartements" },
@@ -20,8 +23,8 @@ export default function Navbar() {
     <>
       <header className="sticky top-0 z-30 bg-sand-50/90 backdrop-blur border-b border-sand-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-tight text-terracotta-600">
-            AgaDream
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.jpg" alt="AgaDream" width={120} height={40} className="h-10 w-auto object-contain" priority />
           </Link>
 
           {/* Desktop nav */}
@@ -42,14 +45,16 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/contact"
-              className="hidden md:inline-flex bg-terracotta-500 hover:bg-terracotta-600 text-white text-sm font-semibold px-4 py-2 rounded-full transition-colors"
+            <a
+              href={buildWhatsAppGenericUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20b858] text-white text-sm font-semibold px-4 py-2 rounded-full transition-colors"
             >
+              <WhatsAppIcon className="w-4 h-4 shrink-0" />
               Réserver
-            </Link>
+            </a>
 
-            {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(true)}
               className="md:hidden p-2 rounded-lg hover:bg-sand-200 transition-colors"

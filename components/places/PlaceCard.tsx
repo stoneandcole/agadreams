@@ -8,20 +8,20 @@ import StarRating from "@/components/ui/StarRating";
 
 export const categoryLabel: Record<PlaceCategory, string> = {
   restaurant: "Restaurant",
-  plage: "Plage",
-  activite: "Activité",
-  excursion: "Excursion",
-  shopping: "Shopping",
-  nightlife: "Nightlife",
+  plage:      "Plage",
+  activite:   "Activité",
+  excursion:  "Excursion",
+  shopping:   "Shopping",
+  nightlife:  "Nightlife",
 };
 
 const categoryColor: Record<PlaceCategory, string> = {
   restaurant: "bg-amber-100 text-amber-700",
-  plage: "bg-ocean-100 text-ocean-700",
-  activite: "bg-emerald-100 text-emerald-700",
-  excursion: "bg-purple-100 text-purple-700",
-  shopping: "bg-pink-100 text-pink-700",
-  nightlife: "bg-indigo-100 text-indigo-700",
+  plage:      "bg-ocean-100 text-ocean-700",
+  activite:   "bg-emerald-100 text-emerald-700",
+  excursion:  "bg-purple-100 text-purple-700",
+  shopping:   "bg-pink-100 text-pink-700",
+  nightlife:  "bg-indigo-100 text-indigo-700",
 };
 
 export default function PlaceCard({ place, index = 0 }: { place: Place; index?: number }) {
@@ -32,11 +32,9 @@ export default function PlaceCard({ place, index = 0 }: { place: Place; index?: 
       viewport={{ once: true }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay: index * 0.07 }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      whileTap={{ scale: 0.98 }}
     >
-      <Link
-        href={`/explorer/${place.slug}`}
-        className="group block rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-shadow duration-300"
-      >
+      <Link href={`/explorer/${place.slug}`} className="group block rounded-2xl overflow-hidden bg-white shadow-card hover:shadow-card-hover transition-shadow duration-300">
         <div className="relative h-40 bg-sand-200 overflow-hidden">
           <Image
             src={place.images[0]}

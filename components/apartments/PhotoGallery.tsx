@@ -11,65 +11,68 @@ interface Props {
 }
 
 export default function PhotoGallery({ images, title }: Props) {
-  const [index, setIndex] = useState(-1);
-  const preview = images.slice(0, 5);
-  const remaining = images.length - 5;
+  const [lightboxIndex, setLightboxIndex] = useState(-1);
+  const [mobileIndex, setMobileIndex] = useState(0);
 
   return (
     <>
-      <div className="grid grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden h-72 sm:h-96 mb-8">
-        {/* Main large image */}
+      {/* ── Mobile: full-width swipeable + thumbnail strip ── */}
+      <div className="sm:hidden mb-6">
         <div
-          className="col-span-2 row-span-2 relative cursor-pointer group"
-          onClick={() => setIndex(0)}
+          className="relative aspect-video rounded-2xl overflow-hidden bg-sand-200 cursor-pointer mb-2"
+          onClick={() => setLightboxIndex(mobileIndex)}
         >
           <Image
-            src={preview[0]}
-            alt={title}
+            src={images[mobileIndex]}
+            alt={`${title} — photo ${mobileIndex + 1}`}
             fill
-            className="object-cover group-hover:brightness-90 transition-all"
-            sizes="(max-width: 768px) 50vw, 40vw"
-            priority
+            className="object-cover"
+            sizes="100vw"
+            priority={mobileIndex === 0}
           />
+          <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+            {mobileIndex + 1} / {images.length}
+          </div>
         </div>
+        {/* Thumbnail strip */}
+        <div className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory">
+          {images.map((src, i) => (
+            <button
+              key={src}
+              onClick={() => setMobileIndex(i)}
+              className={`relative shrink-0 w-16 h-16 rounded-xl overflow-hidden snap-start transition-all ${
+                i === mobileIndex ? "ring-2 ring-terracotta-500" : "opacity-60 hover:opacity-100"
+              }`}
+            >
+              <Image src={src} alt={`${title} ${i + 1}`} fill className="object-cover" sizes="64px" />
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {/* Smaller images */}
-        {preview.slice(1).map((src, i) => (
-          <div
-            key={src}
-            className="relative cursor-pointer group"
-            onClick={() => setIndex(i + 1)}
-          >
-            <Image
-              src={src}
-              alt={`${title} ${i + 2}`}
-              fill
-              className="object-cover group-hover:brightness-90 transition-all"
-              sizes="25vw"
-            />
-            {/* Overlay on last visible if more */}
-            {i === 3 && remaining > 0 && (
+      {/* ── Desktop: mosaic grid ── */}
+      <div className="hidden sm:grid grid-cols-4 grid-rows-2 gap-2 rounded-2xl overflow-hidden h-80 lg:h-96 mb-8">
+        {/* Main large image */}
+        <div className="col-span-2 row-span-2 relative cursor-pointer group" onClick={() => setLightboxIndex(0)}>
+          <Image src={images[0]} alt={title} fill className="object-cover group-hover:brightness-90 transition-all" sizes="40vw" priority />
+        </div>
+        {/* Smaller thumbnails */}
+        {images.slice(1, 5).map((src, i) => (
+          <div key={src} className="relative cursor-pointer group" onClick={() => setLightboxIndex(i + 1)}>
+            <Image src={src} alt={`${title} ${i + 2}`} fill className="object-cover group-hover:brightness-90 transition-all" sizes="20vw" />
+            {i === 3 && images.length > 5 && (
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">+{remaining}</span>
+                <span className="text-white font-bold text-lg">+{images.length - 5}</span>
               </div>
             )}
           </div>
         ))}
-
-        {/* Show all button */}
-        <button
-          onClick={() => setIndex(0)}
-          className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-stone-800 text-xs font-semibold px-3 py-1.5 rounded-full shadow transition-colors hidden sm:block"
-          style={{ position: "absolute" }}
-        >
-          Voir toutes les photos
-        </button>
       </div>
 
       <Lightbox
-        open={index >= 0}
-        close={() => setIndex(-1)}
-        index={index}
+        open={lightboxIndex >= 0}
+        close={() => setLightboxIndex(-1)}
+        index={lightboxIndex}
         slides={images.map((src) => ({ src }))}
       />
     </>

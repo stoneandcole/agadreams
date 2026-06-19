@@ -1,19 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import { filterApartments, allZones, maxApartmentPrice, ApartmentFilters as FiltersType } from "@/lib/data";
 import ApartmentCard from "@/components/apartments/ApartmentCard";
 import ApartmentFilters from "@/components/apartments/ApartmentFilters";
 
-export default function AppartementsPage() {
-  const [filters, setFilters] = useState<FiltersType>({});
+function AppartementsContent() {
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<FiltersType>(() => {
+    const zone = searchParams.get("zone");
+    return zone ? { zone } : {};
+  });
+
+  useEffect(() => {
+    const zone = searchParams.get("zone");
+    if (zone) setFilters((f) => ({ ...f, zone }));
+  }, [searchParams]);
+
   const results = filterApartments(filters);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div className="mb-10">
-        <p className="text-terracotta-500 text-sm font-semibold uppercase tracking-wider mb-2">Tous les logements</p>
-        <h1 className="text-4xl font-bold text-stone-800">Appartements à Agadir</h1>
+        <p className="eyebrow mb-2">Tous les logements</p>
+        <h1 className="font-display text-4xl font-bold text-stone-800">Appartements à Agadir</h1>
         <p className="text-stone-500 mt-3 max-w-xl">
           Chaque appartement a été visité et filmé personnellement. Retrouvez la vidéo de visite sur chaque fiche.
         </p>
@@ -28,11 +40,22 @@ export default function AppartementsPage() {
       />
 
       {results.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {results.map((apt) => (
-            <ApartmentCard key={apt.slug} apartment={apt} />
-          ))}
-        </div>
+        <AnimatePresence mode="popLayout">
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {results.map((apt, i) => (
+              <motion.div
+                key={apt.slug}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ApartmentCard apartment={apt} index={i} />
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       ) : (
         <div className="text-center py-20 text-stone-400">
           <p className="text-5xl mb-4">🔍</p>
@@ -46,5 +69,13 @@ export default function AppartementsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AppartementsPage() {
+  return (
+    <Suspense>
+      <AppartementsContent />
+    </Suspense>
   );
 }

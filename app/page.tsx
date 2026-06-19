@@ -3,12 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { getFeaturedApartments, places } from "@/lib/data";
+import { getFeaturedApartments, places, influencer, socials, allZones } from "@/lib/data";
 import ApartmentCard from "@/components/apartments/ApartmentCard";
 import PlaceCard from "@/components/places/PlaceCard";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 
-const stats = [
+const heroStats = [
   { value: "4", label: "Appartements sélectionnés" },
   { value: "6", label: "Adresses testées" },
   { value: "1", label: "Influenceur de confiance" },
@@ -47,7 +47,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+            className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-6"
           >
             L&apos;appartement parfait,
             <br />
@@ -83,6 +83,25 @@ export default function HomePage() {
             </Link>
           </motion.div>
 
+          {/* Quick zone pills */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.75 }}
+            className="flex flex-wrap justify-center gap-2 mt-5"
+          >
+            <span className="text-white/40 text-xs self-center mr-1">Filtrer par zone :</span>
+            {allZones.map((zone) => (
+              <Link
+                key={zone}
+                href={`/appartements?zone=${encodeURIComponent(zone)}`}
+                className="text-xs text-white/70 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition-colors"
+              >
+                {zone}
+              </Link>
+            ))}
+          </motion.div>
+
           {/* Stats */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -90,7 +109,7 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="flex flex-wrap justify-center gap-8 mt-16 pt-10 border-t border-white/20"
           >
-            {stats.map((s) => (
+            {heroStats.map((s) => (
               <div key={s.label} className="text-center">
                 <p className="text-3xl font-bold text-white">{s.value}</p>
                 <p className="text-white/60 text-xs mt-1">{s.label}</p>
@@ -98,6 +117,24 @@ export default function HomePage() {
             ))}
           </motion.div>
         </div>
+
+        {/* Scroll arrow */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
+            className="text-white/50"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Featured apartments */}
@@ -105,9 +142,9 @@ export default function HomePage() {
         <AnimatedSection className="flex items-end justify-between mb-8">
           <div>
             <p className="text-terracotta-500 text-sm font-semibold uppercase tracking-wider mb-1">Sélection AgaDream</p>
-            <h2 className="text-3xl font-bold text-stone-800">Appartements coup de cœur</h2>
+            <h2 className="font-display text-3xl font-bold text-stone-800">Appartements coup de cœur</h2>
           </div>
-          <Link href="/appartements" className="text-sm font-medium text-terracotta-600 hover:underline hidden sm:block">
+          <Link href="/appartements" className="text-sm font-medium text-terracotta-600 hover:underline">
             Voir tout →
           </Link>
         </AnimatedSection>
@@ -124,19 +161,19 @@ export default function HomePage() {
         <section className="bg-sand-100 py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row items-center gap-10">
-              {/* Avatar */}
-              <div className="relative w-32 h-32 rounded-full overflow-hidden shrink-0 ring-4 ring-terracotta-200">
+              {/* Logo */}
+              <div className="relative w-40 h-40 shrink-0">
                 <Image
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80"
-                  alt="AgaDream influenceur"
+                  src="/logo.jpg"
+                  alt="AgaDream"
                   fill
-                  className="object-cover"
-                  sizes="128px"
+                  className="object-contain"
+                  sizes="160px"
                 />
               </div>
               <div>
                 <p className="text-terracotta-500 text-sm font-semibold uppercase tracking-wider mb-2">Pourquoi AgaDream ?</p>
-                <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 mb-3">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-stone-800 mb-3">
                   Pas de photos retouchées. Pas de surprises.
                 </h2>
                 <p className="text-stone-600 text-lg leading-relaxed mb-4">
@@ -151,11 +188,25 @@ export default function HomePage() {
         </section>
       </AnimatedSection>
 
+      {/* Influencer stats strip */}
+      <AnimatedSection>
+        <section className="bg-terracotta-500 py-12 px-4">
+          <div className="max-w-4xl mx-auto grid grid-cols-3 gap-6 text-center text-white">
+            {influencer.stats.map((s) => (
+              <div key={s.label}>
+                <p className="text-3xl sm:text-4xl font-bold">{s.value}</p>
+                <p className="text-terracotta-100 text-xs sm:text-sm mt-1 leading-tight">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </AnimatedSection>
+
       {/* Nearby experiences */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <AnimatedSection className="mb-8">
           <p className="text-terracotta-500 text-sm font-semibold uppercase tracking-wider mb-1">Mes adresses</p>
-          <h2 className="text-3xl font-bold text-stone-800">À découvrir autour</h2>
+          <h2 className="font-display text-3xl font-bold text-stone-800">À découvrir autour</h2>
         </AnimatedSection>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -173,6 +224,36 @@ export default function HomePage() {
           </Link>
         </AnimatedSection>
       </section>
+
+      {/* Closing band — social + CTA */}
+      <AnimatedSection>
+        <section className="bg-stone-900 py-16 px-4 text-center text-white">
+          <p className="text-terracotta-300 text-sm font-semibold uppercase tracking-widest mb-3">Suivre AgaDream</p>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold mb-6 max-w-lg mx-auto">
+            Nouvelles adresses, nouveaux appartements — chaque semaine.
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <a href={socials.instagram.url} target="_blank" rel="noopener noreferrer"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-2.5 rounded-full transition-colors text-sm">
+              Instagram · {socials.instagram.handle}
+            </a>
+            <a href={socials.tiktok.url} target="_blank" rel="noopener noreferrer"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-2.5 rounded-full transition-colors text-sm">
+              TikTok · {socials.tiktok.handle}
+            </a>
+            <a href={socials.youtube.url} target="_blank" rel="noopener noreferrer"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-2.5 rounded-full transition-colors text-sm">
+              YouTube · {socials.youtube.handle}
+            </a>
+          </div>
+          <Link
+            href="/appartements"
+            className="inline-block bg-terracotta-500 hover:bg-terracotta-600 text-white font-semibold px-8 py-3.5 rounded-full transition-colors"
+          >
+            Trouver mon appartement
+          </Link>
+        </section>
+      </AnimatedSection>
     </>
   );
 }

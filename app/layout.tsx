@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import WhatsAppFab from "@/components/ui/WhatsAppFab";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  axes: ["opsz"],
 });
 
 export const metadata: Metadata = {
@@ -14,6 +21,10 @@ export const metadata: Metadata = {
   description:
     "Découvrez les meilleurs appartements à Agadir sélectionnés et testés par l'influenceur AgaDream, avec ses coups de cœur restaurants, plages et activités à proximité.",
   metadataBase: new URL("https://agadream.ma"),
+  icons: {
+    icon: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
   openGraph: {
     siteName: "AgaDream",
     locale: "fr_FR",
@@ -29,11 +40,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className={`${jakarta.variable} h-full antialiased`}>
+    <html lang="fr" className={`${jakarta.variable} ${fraunces.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-sand-50 text-stone-800">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <WhatsAppFab />
       </body>
     </html>
   );

@@ -215,6 +215,26 @@ export function getSimilarApartments(slug: string, limit = 3): Apartment[] {
     .slice(0, limit);
 }
 
+export function getLinkedApartments(placeSlug: string): Apartment[] {
+  return apartments.filter((a) => a.nearbyPlaces.some((p) => p.slug === placeSlug));
+}
+
 export const allZones = [...new Set(apartments.map((a) => a.zone))];
 export const allAmenities = [...new Set(apartments.flatMap((a) => a.amenities))];
 export const maxApartmentPrice = Math.max(...apartments.map((a) => a.pricePerNight));
+
+export const socials = {
+  instagram: { url: "https://www.instagram.com/agadream", handle: "@agadream" },
+  tiktok:    { url: "https://www.tiktok.com/@agadream",   handle: "@agadream" },
+  youtube:   { url: "https://www.youtube.com/@agadream",  handle: "AgaDream"  },
+};
+
+export const influencer = {
+  name: "AgaDream",
+  photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+  stats: [
+    { value: "45K+",  label: "Abonnés Instagram" },
+    { value: "120K+", label: "Followers TikTok"  },
+    { value: "50+",   label: "Séjours organisés" },
+  ],
+};
