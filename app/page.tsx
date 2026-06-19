@@ -23,7 +23,7 @@ export default function HomePage() {
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {/* Background image */}
         <Image
-          src="https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?w=1800&q=80"
+          src="/hero.jpg"
           alt="Agadir vue panoramique"
           fill
           className="object-cover"
