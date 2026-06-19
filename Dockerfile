@@ -1,35 +1,13 @@
-FROM node:20-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
-
-# Build the app
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-# Production runner
-FROM base AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+RUN npm install -g serve
+COPY --from=builder /app/out ./out
 EXPOSE 3000
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-CMD ["node", "server.js"]
+CMD ["serve", "out", "-p", "3000"]

@@ -1,3 +1,4 @@
+export const dynamic = "force-static";
 import { MetadataRoute } from "next";
 import { apartments, places } from "@/lib/data";
 
