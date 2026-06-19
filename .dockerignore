@@ -1,0 +1,8 @@
+.git
+.idea
+node_modules
+.next
+.env*.local
+README.md
+CLAUDE.md
+AGENTS.md

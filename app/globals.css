@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-jakarta);
+
+  /* AgaDream palette */
+  --color-terracotta-50:  #fdf4f0;
+  --color-terracotta-100: #fbe5da;
+  --color-terracotta-200: #f6c9b4;
+  --color-terracotta-300: #efa785;
+  --color-terracotta-400: #e67d52;
+  --color-terracotta-500: #d95c2e;
+  --color-terracotta-600: #c04520;
+  --color-terracotta-700: #9f361a;
+  --color-terracotta-800: #822e1a;
+  --color-terracotta-900: #6c281a;
+
+  --color-sand-50:  #faf8f4;
+  --color-sand-100: #f4f0e6;
+  --color-sand-200: #e9e0cc;
+  --color-sand-300: #d9cba8;
+  --color-sand-400: #c6b282;
+  --color-sand-500: #b39862;
+  --color-sand-600: #9a7e4f;
+  --color-sand-700: #7f6641;
+  --color-sand-800: #685438;
+  --color-sand-900: #574530;
+
+  --color-ocean-50:  #eff8ff;
+  --color-ocean-100: #dff0fe;
+  --color-ocean-200: #b8e2fd;
+  --color-ocean-300: #79ccfb;
+  --color-ocean-400: #33b3f6;
+  --color-ocean-500: #0997e7;
+  --color-ocean-600: #0078c5;
+  --color-ocean-700: #0060a0;
+  --color-ocean-800: #045284;
+  --color-ocean-900: #09446d;
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
